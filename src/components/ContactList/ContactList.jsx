@@ -1,6 +1,6 @@
 import './ContactList.css';
 
-export const ContactList = ({ name, number, handleRemoveContact }) => {
+const ContactList = ({ name, number, handleRemoveContact }) => {
   return (
     <>
       <li>
@@ -16,3 +16,5 @@ export const ContactList = ({ name, number, handleRemoveContact }) => {
     </>
   );
 };
+
+export default ContactList;

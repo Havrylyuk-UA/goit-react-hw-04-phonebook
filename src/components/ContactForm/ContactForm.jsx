@@ -1,80 +1,79 @@
 import './ContactForm.css';
-import { Component } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 
-class ContactForm extends Component {
-  constructor(props) {
-    super(props);
+const initialValue = {
+  name: '',
+  number: '',
+};
 
-    this.state = {
-      name: '',
-      number: '',
-    };
+const ContactForm = ({ contacts, handlePushContact }) => {
+  const [contact, setContact] = useState(initialValue);
 
-    this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeNumber = this.handleChangeNumber.bind(this);
-  }
-
-  handlePushForm = e => {
+  const handlePushForm = e => {
     e.preventDefault();
-    const { contacts, handlePushContact } = this.props;
-    const { name, number } = this.state;
 
-    if (contacts && contacts.some(contact => contact.name === name)) {
-      return alert(`${name} is already in contact!`);
+    if (contacts && contacts.some(item => item.name === contact.name)) {
+      return alert(`${contact.name} is already in contact!`);
     }
 
-    const contact = {
+    const pushCon = {
+      ...contact,
       id: nanoid(10),
-      name,
-      number,
     };
 
-    handlePushContact(contact);
-    this.clearForm();
+    handlePushContact(pushCon);
+    clearForm();
   };
 
-  clearForm = () => {
-    this.setState({ name: '', number: '' });
+  const clearForm = () => {
+    setContact(initialValue);
   };
 
-  handleChangeName(e) {
-    this.setState({ name: e.target.value });
-  }
+  const handleChangeName = e => {
+    const targetName = e.target.value;
+    setContact(prevContact => ({
+      ...prevContact,
+      name: targetName,
+    }));
+  };
 
-  handleChangeNumber(e) {
-    this.setState({ number: e.target.value });
-  }
+  const handleChangeNumber = e => {
+    const targetNumber = e.target.value;
 
-  render() {
-    return (
-      <>
-        <form onSubmit={this.handlePushForm}>
-          <label>
-            <legend>Name</legend>
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChangeName}
-              required
-            />
-          </label>
-          <label>
-            <legend>Number</legend>
-            <input
-              type="tel"
-              name="number"
-              value={this.state.number}
-              onChange={this.handleChangeNumber}
-              required
-            />
-          </label>
-          <button type="submit">Add contact</button>
-        </form>
-      </>
-    );
-  }
-}
+    setContact(prevContact => ({
+      ...prevContact,
+      number: targetNumber,
+    }));
+  };
+
+  return (
+    <>
+      <form onSubmit={handlePushForm}>
+        <label>
+          <legend>Name</legend>
+          <input
+            type="text"
+            name="name"
+            value={contact.name}
+            onChange={handleChangeName}
+            required
+          />
+        </label>
+        <label>
+          <legend>Number</legend>
+          <input
+            type="tel"
+            name="number"
+            value={contact.number}
+            onChange={handleChangeNumber}
+            required
+          />
+        </label>
+        <button type="submit">Add contact</button>
+      </form>
+    </>
+  );
+};
 
 export default ContactForm;

@@ -1,8 +1,10 @@
-export const Filter = ({ handleFilterContact }) => {
+const Filter = ({ handleFilterContact }) => {
   return (
     <>
       <p>Find contact by name</p>
-      <input type="text" name="filter" onChange={handleFilterContact} />
+      <input type="text" name="filter" onChange={() => handleFilterContact()} />
     </>
   );
 };
+
+export default Filter;
