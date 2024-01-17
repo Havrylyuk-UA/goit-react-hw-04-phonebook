@@ -28,7 +28,9 @@ const App = () => {
   };
 
   const handleFilterContact = e => {
-    setContacts({ ...contacts, filter: e.target.value.toLowerCase() });
+    const filtered = e.target.value.toLowerCase();
+    console.log(filtered);
+    setContacts({ ...contacts, filter: filtered });
   };
 
   const handlePushContact = contact => {
