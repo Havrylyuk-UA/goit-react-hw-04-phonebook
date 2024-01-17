@@ -1,56 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 
-const initialValue = {
-  contacts: [],
-  filter: '',
-};
-
 const App = () => {
-  const [contacts, setContacts] = useState(initialValue);
+  const [contacts, setContacts] = useState(() => {
+    const data = JSON.parse(localStorage.getItem('contacts'));
+    return data || [];
+  });
+
+  const [filter, setFilter] = useState('');
+
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    const localContacts = localStorage.getItem('contacts');
-
-    if (localContacts) {
-      setContacts({ contacts: JSON.parse(localContacts) });
+    if (!firstRender.current) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
     }
+  }, [contacts]);
+
+  useEffect(() => {
+    firstRender.current = false;
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts.contacts));
-  }, [contacts.contacts]);
-
   const handleRemoveContact = id => {
-    setContacts({ contacts: contacts.contacts.filter(item => item.id !== id) });
+    const clearContact = contacts.filter(item => item.id !== id);
+    setContacts(clearContact);
   };
 
   const handleFilterContact = e => {
     const filtered = e.target.value.toLowerCase();
-    console.log(filtered);
-    setContacts({ ...contacts, filter: filtered });
+    setFilter(filtered);
   };
 
   const handlePushContact = contact => {
-    setContacts({ ...contacts, contacts: [...contacts.contacts, contact] });
+    setContacts([...contacts, contact]);
   };
 
-  const filteredContactList = contacts.filter
-    ? contacts.contacts.filter(item =>
-        item.name.toLowerCase().includes(contacts.filter)
-      )
-    : contacts.contacts;
+  const filteredContactList = filter
+    ? contacts.filter(item => item.name.toLowerCase().includes(filter))
+    : contacts;
 
   return (
     <div className="contact-container">
       <h1>Phonebook</h1>
-      <ContactForm
-        contacts={contacts.contacts}
-        handlePushContact={handlePushContact}
-      />
-      {contacts.contacts.length === 0 ? (
+      <ContactForm contacts={contacts} handlePushContact={handlePushContact} />
+      {contacts.length === 0 ? (
         ''
       ) : (
         <>
