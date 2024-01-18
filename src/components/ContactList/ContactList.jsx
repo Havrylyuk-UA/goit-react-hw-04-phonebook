@@ -1,20 +1,7 @@
 import './ContactList.css';
 
-const ContactList = ({ name, number, handleRemoveContact }) => {
-  return (
-    <>
-      <li>
-        {name}: {number}
-        <button
-          type="button"
-          className="delete-btn"
-          onClick={handleRemoveContact}
-        >
-          Delete
-        </button>
-      </li>
-    </>
-  );
+const ContactList = ({ children }) => {
+  return <ul>{children}</ul>;
 };
 
 export default ContactList;

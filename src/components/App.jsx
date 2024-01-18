@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
+import ContactListItem from './ContactListItem/ContactListItem';
 
 const App = () => {
   const [contacts, setContacts] = useState(() => {
@@ -51,10 +52,10 @@ const App = () => {
         <>
           <h2>Contacts</h2>
           <Filter handleFilterContact={handleFilterContact} />
-          <ul>
+          <ContactList>
             {filteredContactList.map(({ id, name, number }) => {
               return (
-                <ContactList
+                <ContactListItem
                   key={id}
                   name={name}
                   number={number}
@@ -62,7 +63,7 @@ const App = () => {
                 />
               );
             })}
-          </ul>
+          </ContactList>
         </>
       )}
     </div>
